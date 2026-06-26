@@ -1,0 +1,9 @@
+target/
+dbt_packages/
+logs/
+*.duckdb
+.env
+profiles.yml
+jaffle-data/
+.DS_Store
+models/.DS_Store
