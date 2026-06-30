@@ -24,3 +24,10 @@ models:
         data_tests:
           - unique
           - not_null
+
+  - name: stg_stores
+    columns:
+      - name: store_id
+        data_tests:
+          - unique
+          - not_null
