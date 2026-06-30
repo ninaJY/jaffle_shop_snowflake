@@ -11,24 +11,14 @@ with orders as (
     {% if is_incremental() %}
         where order_date > (select max(order_date) from {{ this }})
     {% endif %}
-),
-
-customers as (
-    select * from {{ ref('stg_customers') }}
-),
-
-final as (
-    select
-        orders.order_id,
-        orders.customer_id,
-        customers.customer_name,
-        orders.order_date,
-        orders.store_id,
-        orders.subtotal,
-        orders.tax_paid,
-        orders.order_total
-    from orders
-    left join customers using (customer_id)
 )
 
-select * from final
+select
+    order_id,
+    customer_id,
+    store_id,
+    order_date,
+    subtotal,
+    tax_paid,
+    order_total
+from orders
