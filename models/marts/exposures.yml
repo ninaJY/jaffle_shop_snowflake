@@ -1,0 +1,18 @@
+version: 2
+
+exposures:
+  - name: sales_overview_dashboard
+    type: dashboard
+    maturity: medium
+    url: http://localhost:3000/dashboard/2-sales-overview
+    description: >
+      Dashboard showing sales overview including total revenue, 
+      order trends, and store performance.
+    depends_on:
+      - ref('fct_orders')
+      - ref('dim_customers')
+      - ref('dim_products')
+      - ref('dim_stores')
+    owner:
+      name: Nina
+      email: fatiejul@gmail.com
