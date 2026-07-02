@@ -5,20 +5,12 @@
     )
 }}
 
-with orders as (
-    select * from {{ ref('stg_orders') }}
+with int_orders as (
+    select * from {{ ref('int_orders_joined') }}
 
     {% if is_incremental() %}
         where order_date > (select max(order_date) from {{ this }})
     {% endif %}
 )
 
-select
-    order_id,
-    customer_id,
-    store_id,
-    order_date,
-    subtotal,
-    tax_paid,
-    order_total
-from orders
+select * from int_orders
