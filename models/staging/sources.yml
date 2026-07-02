@@ -3,11 +3,21 @@ version: 2
 sources:
   - name: jaffle_shop
     schema: dbt_dev
+    freshness:
+      warn_after: {count: 24, period: hour}
+      error_after: {count: 48, period: hour}
+    loaded_at_field: ordered_at
     tables:
       - name: raw_customers
+        freshness: null
       - name: raw_orders
-      - name: raw_order_items
-      - name: raw_products
+      - name: raw_payments
+        freshness: null
       - name: raw_stores
+        freshness: null
+      - name: raw_products
+        freshness: null
       - name: raw_supplies
-    
+        freshness: null
+      - name: raw_items
+        freshness: null
