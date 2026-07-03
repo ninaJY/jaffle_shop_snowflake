@@ -12,6 +12,25 @@ a Kimball-style star schema, and BI dashboard integration with Metabase.
 - **snapshots**: tracks historical changes in order data (SCD Type 2)
 - **exposures**: documents downstream BI usage in Metabase
 
+## Data Model
+
+```mermaid
+graph LR
+    raw_customers --> stg_customers
+    raw_orders --> stg_orders
+    raw_products --> stg_products
+    raw_stores --> stg_stores
+
+    stg_orders --> int_orders_joined
+    stg_customers --> int_orders_joined
+    stg_stores --> int_orders_joined
+
+    int_orders_joined --> fct_orders
+    stg_customers --> dim_customers
+    stg_products --> dim_products
+    stg_stores --> dim_stores
+```
+
 ## Key Concepts Demonstrated
 - Incremental models: only processes new data on each run
 - dbt Snapshots: captures historical changes (SCD Type 2)
