@@ -1,0 +1,49 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  dbt-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dbt
+        run: pip install dbt-snowflake
+
+      - name: Create profiles.yml
+        run: |
+          mkdir -p ~/.dbt
+          cat > ~/.dbt/profiles.yml << EOF
+          jaffle_shop_snowflake:
+            target: dev
+            outputs:
+              dev:
+                type: snowflake
+                account: ${{ secrets.DBT_SNOWFLAKE_ACCOUNT }}
+                user: ${{ secrets.DBT_SNOWFLAKE_USER }}
+                password: ${{ secrets.DBT_SNOWFLAKE_PASSWORD }}
+                role: ${{ secrets.DBT_SNOWFLAKE_ROLE }}
+                warehouse: ${{ secrets.DBT_SNOWFLAKE_WAREHOUSE }}
+                database: ${{ secrets.DBT_SNOWFLAKE_DATABASE }}
+                schema: dbt_deploy
+                threads: 4
+          EOF
+
+      - name: Run dbt build
+        run: dbt build --exclude source:*%
+
+      - name: Upload manifest for slim CI
+        uses: actions/upload-artifact@v4
+        with:
+          name: prod-manifest
+          path: target/manifest.json
+          retention-days: 30
