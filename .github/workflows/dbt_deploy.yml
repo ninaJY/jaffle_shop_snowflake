@@ -38,6 +38,10 @@ jobs:
                 threads: 4
           EOF
 
+      # 新增这一步 ⭐⭐⭐
+      - name: Install dbt packages
+        run: dbt deps
+
       - name: Run dbt build
         run: dbt build --exclude source:*%
 
