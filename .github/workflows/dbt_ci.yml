@@ -40,5 +40,20 @@ jobs:
                 threads: 4
           EOF
 
-      - name: Run dbt build
-        run: dbt build --exclude source:*
+      # 新增这一步 ⭐
+      - name: Download production manifest
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: dbt_deploy.yml
+          branch: main
+          name: prod-manifest
+          path: prod-artifacts
+
+      # 这一步的内容改了 ⭐
+      - name: Run dbt build (slim CI)
+        run: >
+          dbt build
+          --select state:modified+
+          --defer
+          --state ./prod-artifacts
+          --exclude source:*%
