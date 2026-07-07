@@ -5,18 +5,38 @@ models:
     columns:
       - name: order_id
         data_tests:
-          - unique
-          - not_null
+          - unique:
+              config:
+                enabled: "{{ target.name == 'prod' }}"
+          - not_null:
+              config:
+                where: "order_date >= dateadd('day', -30, current_date())"
       - name: customer_id
         data_tests:
           - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+              config:
+                where: "customer_id is not null"
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - customer_id
+            - order_date
 
   - name: dim_customers
     columns:
       - name: customer_id
         data_tests:
-          - unique
+          - unique:
+              config:
+                store_failures: true
+                store_failures_as: view
           - not_null
+      - name: customer_name
+        data_tests:
+          - not_empty_string
 
   - name: dim_products
     columns:
