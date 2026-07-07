@@ -85,3 +85,12 @@ models:
         description: "Name of the store."
       - name: opened_at
         description: "Date the store opened."
+        
+  - name: dim_date
+    description: "Independent date dimension table generated via dbt_utils.date_spine, covering 2020-01-01 to 2030-12-31."
+    columns:
+      - name: date_day
+        description: "Primary key. One row per calendar day."
+        data_tests:
+          - unique
+          - not_null
