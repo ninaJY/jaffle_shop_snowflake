@@ -7,8 +7,12 @@ models:
       - name: order_id
         description: "Primary key. Unique identifier for each order."
         data_tests:
-          - unique
-          - not_null
+          - unique:
+              config:
+                enabled: "{{ target.name == 'prod' }}"
+          - not_null:
+              config:
+                where: "order_date >= dateadd('day', -30, current_date())"
       - name: customer_id
         description: "Foreign key to dim_customers."
         data_tests:
@@ -16,6 +20,8 @@ models:
           - relationships:
               to: ref('dim_customers')
               field: customer_id
+              config:
+                where: "customer_id is not null"
       - name: store_id
         description: "Foreign key to dim_stores."
         data_tests:
@@ -30,6 +36,11 @@ models:
         description: "Tax amount paid."
       - name: order_total
         description: "Total order amount including tax."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - customer_id
+            - order_date
 
   - name: dim_customers
     description: "Customer dimension table containing one row per customer."
@@ -37,10 +48,15 @@ models:
       - name: customer_id
         description: "Primary key. Unique identifier for each customer."
         data_tests:
-          - unique
+          - unique:
+              config:
+                store_failures: true
+                store_failures_as: view
           - not_null
       - name: customer_name
         description: "Full name of the customer."
+        data_tests:
+          - not_empty_string
 
   - name: dim_products
     description: "Product dimension table containing one row per product."

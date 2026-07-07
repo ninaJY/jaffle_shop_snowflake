@@ -23,6 +23,7 @@ jobs:
 
       - name: Create profiles.yml
         run: |
+      
           mkdir -p ~/.dbt
           cat > ~/.dbt/profiles.yml << EOF
           jaffle_shop_snowflake:
@@ -40,7 +41,10 @@ jobs:
                 threads: 4
           EOF
 
-      # 新增这一步 ⭐
+      # 新增这一步 ⭐⭐⭐
+      - name: Install dbt packages
+        run: dbt deps
+
       - name: Download production manifest
         uses: dawidd6/action-download-artifact@v6
         with:
@@ -49,7 +53,6 @@ jobs:
           name: prod-manifest
           path: prod-artifacts
 
-      # 这一步的内容改了 ⭐
       - name: Run dbt build (slim CI)
         run: >
           dbt build
