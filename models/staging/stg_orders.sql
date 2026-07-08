@@ -1,4 +1,4 @@
--- verify slim ci only runs modified model and downstream
+-- verify slim ci only runs modified model and downstream 3rd
 
 with source as (
     select * from {{ source('jaffle_shop', 'raw_orders') }}
