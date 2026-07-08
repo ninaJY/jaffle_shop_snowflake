@@ -2,6 +2,8 @@ version: 2
 
 models:
   - name: fct_orders
+    config:
+      group: core
     description: "Incremental fact table containing one row per order with key metrics. Joins to dim_customers and dim_stores for enrichment."
     columns:
       - name: order_id
@@ -43,6 +45,8 @@ models:
             - order_date
 
   - name: dim_customers
+    config:
+      group: core
     description: "Customer dimension table containing one row per customer."
     columns:
       - name: customer_id
@@ -59,6 +63,8 @@ models:
           - not_empty_string
 
   - name: dim_products
+    config:
+      group: core
     description: "Product dimension table containing one row per product."
     columns:
       - name: product_id
@@ -74,6 +80,8 @@ models:
         description: "Product type or category."
 
   - name: dim_stores
+    config:
+      group: core
     description: "Store dimension table containing one row per store."
     columns:
       - name: store_id
@@ -85,8 +93,10 @@ models:
         description: "Name of the store."
       - name: opened_at
         description: "Date the store opened."
-        
+
   - name: dim_date
+    config:
+      group: core
     description: "Independent date dimension table generated via dbt_utils.date_spine, covering 2020-01-01 to 2030-12-31."
     columns:
       - name: date_day
