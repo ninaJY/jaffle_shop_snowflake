@@ -1,7 +1,15 @@
 version: 2
 
+groups:
+  - name: core
+    owner:
+      name: Nina
+
 models:
   - name: stg_customers
+    access: private
+    config:
+      group: core
     columns:
       - name: customer_id
         data_tests:
@@ -9,6 +17,9 @@ models:
           - not_null
 
   - name: stg_orders
+    access: private
+    config:
+      group: core
     columns:
       - name: order_id
         data_tests:
@@ -19,6 +30,9 @@ models:
           - not_null
 
   - name: stg_products
+    access: private
+    config:
+      group: core
     columns:
       - name: product_id
         data_tests:
@@ -26,6 +40,9 @@ models:
           - not_null
 
   - name: stg_stores
+    access: private
+    config:
+      group: core
     columns:
       - name: store_id
         data_tests:
